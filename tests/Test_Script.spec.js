@@ -24,7 +24,7 @@ test('Login and create order', async({API,VerifyOrder,loginPage }) =>
 /**
  * This test is for End to End web application process
  */
-test.only('Verify End to end testing', async ({ registerPage,loginPage,orderSelectedProduct}) => 
+test('Verify End to end testing', async ({ registerPage,loginPage,orderSelectedProduct}) => 
 {
   
     /**
@@ -53,7 +53,5 @@ test.only('Verify End to end testing', async ({ registerPage,loginPage,orderSele
         await orderSelectedProduct.ProductAddToCart()
         await orderSelectedProduct.CheckoutProduct()
     })
-
-
 
 })
