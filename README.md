@@ -1,13 +1,13 @@
 # pandas-llm
 
-pandas-llm is a Python library that extends pandas to allow querying datasets using OpenAI prompts. This powerful tool leverages the natural language processing capabilities of OpenAI to offer intuitive, language-based querying of your pandas dataframes.
+pandas-llm is a lightweight Python library that extends pandas to allow querying datasets using OpenAI prompts. This powerful tool leverages the natural language processing capabilities of OpenAI to offer intuitive, language-based querying of your pandas dataframes.
 
 ## Installation
 
 Install pandas-llm using pip:
 
 ```shell
-pip install pandas-llm
+pip install pandas_llm
 ```
 
 ## Features

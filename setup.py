@@ -21,9 +21,9 @@ setup(
     keywords=["pypi", "pandas-llm", "pandas", "llm", "ai", "openai", "chatgpt"], #descriptive meta-data
     packages=find_packages(),
     classifiers=[                                   # https://pypi.org/classifiers
-        'Development Status :: 1 - Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: Artificial Intelligence',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
         "Operating System :: OS Independent",
@@ -54,5 +54,5 @@ setup(
         'urllib3',
         'yarl'
     ],   
-    download_url="https://github.com/DashyDashOrg/pandas-llm/",
+    download_url="https://github.com/DashyDashOrg/pandas-llm/releases/tag/v0.0.1",
 )
