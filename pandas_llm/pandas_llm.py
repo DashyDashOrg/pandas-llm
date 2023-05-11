@@ -41,19 +41,6 @@ Columns and their type are the following:
 
     def buildPromptForProblemSolving(self, request):
 
-#         prompt_problem = f"""
-# Given a DataFrame named 'df', write a Python code snippet to address the following request:
-# {request}
-
-# Please adhere to these guidelines while crafting the code:
-# 1. When comparing or search strings, always use lower case letters and ignore case sensitivity and apply a "contains" search.
-# 2. If a request involves searching for a string without specifying a column (i.e. "search for Milk"), search in both category columns and product name columns.
-# 3. if not requested explicitely, the result will show only the column indicated in the request.
-
-# Make sure the answer is a single line of code without explanations, comments, or additional details. 
-# if a solution in a single line of code is not possible, you are allowed to write multi line solution, even functions but the end of the code must be an assignment to the variable 'result'.
-# Assign the resulting code to the variable 'result'.
-
         prompt_problem = f"""
 
 Given a DataFrame named 'df', write a Python code snippet that addresses the following request:
@@ -110,11 +97,13 @@ Avoid importing any additional libraries than pandas and numpy.
         
 
     def save(self,name,value):
-        try:
-            with open(name, 'w') as file:
-                file.write(value)
-        except Exception as e:
-            print(e)
+        #  currently disabled
+        # try:
+        #     with open(name, 'w') as file:
+        #         file.write(value)
+        # except Exception as e:
+        #     print(e)
+        return
 
     def execInSandbox(self, df, generated_code:str):
 
@@ -122,10 +111,8 @@ Avoid importing any additional libraries than pandas and numpy.
         sandbox = Sandbox()
         sandbox.allow_import("pandas")
         sandbox.allow_import("numpy")
-        # sandbox.allow_import("datetime")
 
         # Define the initial code to set up the DataFrame
-        # dict = df.to_dict()
         initial_code = f"""
 import pandas as pd
 import datetime
@@ -211,7 +198,6 @@ import numpy as np
                 break
 
         formatted_result = self.variable_to_string(result)
-        # formatted_result = str(result)
 
         # check if the result is empty
         if formatted_result is None or formatted_result == "" or formatted_result.strip() == "" or len(formatted_result) == 0:
@@ -220,7 +206,7 @@ import numpy as np
         self.save("temp/prompt_result.json",formatted_result)
 
         if self.privacy == True:
-            return formatted_result
+            return result
 
         messages=[
                 {"role": "system", 
