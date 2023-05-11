@@ -17,6 +17,7 @@ class PandasLLM(pd.DataFrame):
     presentation = False
     prompt_bulletpoint = ""
     save_path = ""
+    verbose = False
 
     def __init__(self, data=None, config=None, *args, **kwargs):
         super().__init__(data, *args, **kwargs)
@@ -32,6 +33,7 @@ class PandasLLM(pd.DataFrame):
         self.presentation = self.config.get("presentation", self.presentation)
         self.prompt_bulletpoint = self.config.get("prompt_bulletpoint", self.prompt_bulletpoint)
         self.save_path = self.config.get("save_path", self.save_path)
+        self.verbose = self.config.get("verbose", self.verbose)
 
     def buildPromptForRole(self):
         prompt_role = f"""
@@ -77,6 +79,10 @@ While crafting the code, please follow these guidelines:
         # If no match is found, return an empty string
         return ""
 
+    def print(self,  *args, **kwargs):
+        if self.verbose:
+            print(*args, **kwargs)
+
     def variable_to_string(self, variable):
         if variable is None: return None
         try:
@@ -101,12 +107,13 @@ While crafting the code, please follow these guidelines:
         
 
     def save(self,name,value):
-        #  currently disabled
-        # try:
-        #     with open(name, 'w') as file:
-        #         file.write(value)
-        # except Exception as e:
-        #     print(e)
+        if len(self.save_path) == 0:
+            return  
+        try:
+            with open(f"{self.save_path}/{name}", 'w') as file:
+                file.write(value)
+        except Exception as e:
+            self.print(f"error {e}")
         return
 
     def execInSandbox(self, df, generated_code:str):
@@ -160,7 +167,7 @@ import numpy as np
                 )
                 break;
             except Exception as e:
-                print(f"error {e}")
+                self.print(f"error {e}")
                 continue
 
         if response is None:
@@ -170,7 +177,7 @@ import numpy as np
 
         generated_code = response.choices[0].message.content
         if generated_code == "" or generated_code is None:
-            return "Please try again with a different question"
+            return None
         
         results=[]
         for regexp in self.code_blocks:
@@ -181,8 +188,7 @@ import numpy as np
         results.append(generated_code)
 
         if len(results) == 0:
-            return "Please try again with a different question"
-
+            return None
 
         for cleaned_code in results:
 
@@ -190,12 +196,12 @@ import numpy as np
             try:
                 result = self.execInSandbox(self, cleaned_code)
             except Exception as e:
-                print(f"error {e}")
+                self.print(f"error {e}")
                 try:
                     expression = re.sub(r"^\s*result\s*=", "", cleaned_code).strip()
                     result = eval(expression, {'df': self, 'pd': pd, 'np': np, 'datetime': datetime, 'result': result})
                 except Exception as e:
-                    print(f"error {e}")
+                    self.print(f"error {e}")
                     pass
 
             if result is not None and str(result) != "":
@@ -205,60 +211,4 @@ import numpy as np
             # non formatted result
             return result
 
-        formatted_result = self.variable_to_string(result)
-
-        # check if the result is empty
-        if formatted_result is None or formatted_result == "" or formatted_result.strip() == "" or len(formatted_result) == 0:
-            return "Please try again with a different question" 
-
-        self.save("temp/prompt_result.json",formatted_result)
-
-        messages=[
-                {"role": "system", 
-                "content": """
-I want you to act as a data interpreter. 
-you will receive data in different formats and you will explain the data in different formats
-                            """},
-                {"role": "user", 
-                "content": 
-
-f"""
-The user posed this question:
-'{request}'
-
-The answer is provided as a payload with the following data:
-{formatted_result}
-
-Please present the data in a human-readable format, using lists, tables, or other straightforward visualizations. 
-Refrain from using JSON or complex formats in the presentation. 
-Ensure that the output is comprehensible to a non-technical audience. 
-After displaying the data, provide an explanation of its contents but only if it is not obvious from the presentation.
-certain answers apparently are no making sense, but we will accept it, especially if contains code or identifiers.
-"""
-                }
-            ]
-
-        
-        self.save("temp/prompt_desc.json",json.dumps(messages, indent=4))
-
-        response = None
-        for retry in range(3):
-            try:
-                response = openai.ChatCompletion.create(
-                model=self.model,
-                temperature=self.temperature,
-                messages = messages
-                )
-                break
-            except Exception as e:
-                print(f"error {e}")
-                print(f"retry {retry}")
-                time.sleep(5)
-
-        if response is None:
-            return result
-        
-        result = response.choices[0].message.content
-
-        return result
-
+        return None
