@@ -8,14 +8,15 @@ from sandbox import Sandbox
 import re
 import json
 
-
-
 class PandasLLM(pd.DataFrame):
 
+    code_blocks = [r'```python(.*?)```',r'```(.*?)```']
     model = "gpt-3.5-turbo"
     temperature = 0.2
-    code_blocks = [r'```python(.*?)```',r'```(.*?)```']
     privacy = True
+    presentation = False
+    prompt_bulletpoint = ""
+    save_path = ""
 
     def __init__(self, data=None, config=None, *args, **kwargs):
         super().__init__(data, *args, **kwargs)
@@ -24,6 +25,13 @@ class PandasLLM(pd.DataFrame):
 
         # Set up OpenAI API key from the environment or the config
         self.openai_api_key = os.environ.get("OPENAI_KEY") or self.config.get("openai_api_key", "your_openai_api_key")
+
+        self.model = self.config.get("model", self.model)
+        self.temperature = self.config.get("temperature", self.temperature)
+        self.privacy = self.config.get("privacy", self.privacy)
+        self.presentation = self.config.get("presentation", self.presentation)
+        self.prompt_bulletpoint = self.config.get("prompt_bulletpoint", self.prompt_bulletpoint)
+        self.save_path = self.config.get("save_path", self.save_path)
 
     def buildPromptForRole(self):
         prompt_role = f"""
@@ -36,7 +44,6 @@ Columns and their type are the following:
             col_type = self.dtypes[col]
             prompt_role += f"{col} ({col_type})\n"
 
-
         return prompt_role
 
     def buildPromptForProblemSolving(self, request):
@@ -48,14 +55,11 @@ Given a DataFrame named 'df', write a Python code snippet that addresses the fol
 
 While crafting the code, please follow these guidelines:
 1. When comparing or searching for strings, use lower case letters, ignore case sensitivity, and apply a "contains" search.
-2. If a request involves searching for a string without specifying a column (e.g., "search for Milk"), search in both category columns and product name columns.
-3. Unless explicitly requested, the result should only show the column(s) indicated in the request.
-
-Ensure that the answer is a single line of code without explanations, comments, or additional details. 
-If a single line solution is not possible, multiline solutions or functions are acceptable, but the code must end with an assignment to the variable 'result'. 
-Assign the resulting code to the variable 'result'.
-Avoid importing any additional libraries than pandas and numpy.
-        """
+2. Ensure that the answer is a single line of code without explanations, comments, or additional details. 
+3. If a single line solution is not possible, multiline solutions or functions are acceptable, but the code must end with an assignment to the variable 'result'.
+4. Assign the resulting code to the variable 'result'.
+5. Avoid importing any additional libraries than pandas and numpy.
+"""
 
         return prompt_problem
 
@@ -197,6 +201,10 @@ import numpy as np
             if result is not None and str(result) != "":
                 break
 
+        if self.privacy == True:
+            # non formatted result
+            return result
+
         formatted_result = self.variable_to_string(result)
 
         # check if the result is empty
@@ -204,9 +212,6 @@ import numpy as np
             return "Please try again with a different question" 
 
         self.save("temp/prompt_result.json",formatted_result)
-
-        if self.privacy == True:
-            return result
 
         messages=[
                 {"role": "system", 
