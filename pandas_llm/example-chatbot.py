@@ -49,7 +49,7 @@ print(df)
 def main():
 
     # Set the OpenAI API key
-    openai_key = os.environ.get("OPENAI_KEY")
+    openai_key = os.environ.get("OPENAI_API_KEY")
     if openai_key is None:
         print("No OpenAI API key provided. Exiting.")
         return

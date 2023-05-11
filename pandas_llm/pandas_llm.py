@@ -25,7 +25,7 @@ class PandasLLM(pd.DataFrame):
         self.config = config or {}
 
         # Set up OpenAI API key from the environment or the config
-        self.openai_api_key = os.environ.get("OPENAI_KEY") or self.config.get("openai_api_key", "your_openai_api_key")
+        self.openai_api_key = os.environ.get("OPENAI_API_KEY") or self.config.get("openai_api_key", "")
 
         self.model = self.config.get("model", self.model)
         self.temperature = self.config.get("temperature", self.temperature)

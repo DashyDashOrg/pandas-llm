@@ -21,7 +21,7 @@ data = [('John Doe', 25, 50),
 df = pd.DataFrame(data, columns=['name', 'age', 'donation'])
 
 config = {
-    "openai_api_key":os.environ.get("OPENAI_KEY")
+    "openai_api_key":os.environ.get("OPENAI_API_KEY")
 }
 
 conv_df = PandasLLM(data=df, config=config)
