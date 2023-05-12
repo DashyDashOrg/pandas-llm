@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='pandas_llm',                           # should match the package folder
-    version='0.0.2',                                # important for updates
+    version='0.0.3',                                # important for updates
     license='MIT',                                  # should match your chosen license
     description='Conversational Pandas Dataframes',
     long_description=long_description,              # loads your README.md
