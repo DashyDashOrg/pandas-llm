@@ -7,7 +7,7 @@ pandas-llm is a lightweight Python library that extends pandas to allow querying
 Install pandas-llm using pip:
 
 ```shell
-pip install pandas_llm
+pip install pandas-llm
 ```
 
 ## Features
