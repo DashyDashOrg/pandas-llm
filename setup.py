@@ -6,8 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='pandas_llm',                           # should match the package folder
-    # packages=['pandas_llm'],                     # should match the package folder
-    version='0.0.1',                                # important for updates
+    version='0.0.2',                                # important for updates
     license='MIT',                                  # should match your chosen license
     description='Conversational Pandas Dataframes',
     long_description=long_description,              # loads your README.md
@@ -30,29 +29,27 @@ setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        'aiohttp',
-        'aiosignal',
-        'async-timeout',
-        'attrs',
-        'certifi',
-        'charset-normalizer',
-        'frozenlist',
-        'idna',
-        'multidict',
-        # 'numpy==1.24.3',
-        'numpy',
-        'openai>=0.27.6',
-        # 'pandas==2.0.1',
-        'pandas',
-        'python-dateutil',
-        'pytz',
-        'requests',
-        'RestrictedPython==6.0',
-        'six',
-        'tqdm',
-        'tzdata',
-        'urllib3',
-        'yarl'
+        "aiohttp>=3.8.4",
+        "aiosignal>=1.3.1",
+        "async-timeout>=4.0.2",
+        "attrs>=23.1.0",
+        "certifi>=2023.5.7",
+        "charset-normalizer>=3.1.0",
+        "frozenlist>=1.3.3",
+        "idna>=3.4",
+        "multidict>=6.0.4",
+        "numpy>=1.24.3",
+        "openai>=0.27.6",
+        "pandas>=2.0.1",
+        "python-dateutil>=2.8.2",
+        "pytz>=2023.3",
+        "requests>=2.30.0",
+        "RestrictedPython>=6.0",
+        "six>=1.16.0",
+        "tqdm>=4.65.0",
+        "tzdata>=2023.3",
+        "urllib3>=2.0.2",
+        "yarl>=1.9.2",
     ],   
-    download_url="https://github.com/DashyDashOrg/pandas-llm/releases/tag/v0.0.1",
+    download_url="https://github.com/DashyDashOrg/pandas-llm/releases/tag/v0.0.2",
 )
