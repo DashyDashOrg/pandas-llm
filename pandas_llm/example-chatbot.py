@@ -55,7 +55,7 @@ def main():
         print("No OpenAI API key provided. Exiting.")
         return
 
-    conv_df = PandasLLM(data=df, openai_api_key = openai_key)
+    conv_df = PandasLLM(data=df, llm_api_key = openai_key)
     print()
     banner = """
     Welcome to the Donation Data CLI.
