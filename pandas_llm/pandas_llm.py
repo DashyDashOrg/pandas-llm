@@ -11,29 +11,49 @@ import json
 class PandasLLM(pd.DataFrame):
 
     code_blocks = [r'```python(.*?)```',r'```(.*?)```']
-    model = "gpt-3.5-turbo"
-    temperature = 0.2
-    privacy = True
-    presentation = False
-    prompt_bulletpoint = ""
-    save_path = ""
-    verbose = False
 
-    def __init__(self, data=None, config=None, *args, **kwargs):
+    llm_default_model = "gpt-3.5-turbo"
+    llm_default_temperature = 0.2
+    llm_engine = "openai"
+    llm_default_params = { "model": llm_default_model,
+                            "temperature": llm_default_temperature}
+    openai_api_key = None
+    
+    prompt_override = False
+    custom_prompt = ""
+    data_privacy = True
+    path = None
+    verbose = False 
+    code_block = ""
+    def __init__(self, 
+                 data=None, 
+                 llm_engine = "openai", llm_params=llm_default_params, 
+                 prompt_override = False,     
+                 custom_prompt = "", 
+                 path = None,
+                 verbose = False,
+                 data_privacy = True,
+                 openai_api_key = None,
+                 *args, **kwargs):
+        
         super().__init__(data, *args, **kwargs)
         
-        self.config = config or {}
+        self.llm_params = llm_params or {}
 
         # Set up OpenAI API key from the environment or the config
-        self.openai_api_key = os.environ.get("OPENAI_API_KEY") or self.config.get("openai_api_key", "")
+        self.openai_api_key = openai_api_key or os.environ.get("OPENAI_API_KEY")
 
-        self.model = self.config.get("model", self.model)
-        self.temperature = self.config.get("temperature", self.temperature)
-        self.privacy = self.config.get("privacy", self.privacy)
-        self.presentation = self.config.get("presentation", self.presentation)
-        self.prompt_bulletpoint = self.config.get("prompt_bulletpoint", self.prompt_bulletpoint)
-        self.save_path = self.config.get("save_path", self.save_path)
-        self.verbose = self.config.get("verbose", self.verbose)
+        self.llm_engine = llm_engine
+        self.llm_params = llm_params or {}
+        self.model = self.llm_params.get("model", self.llm_default_model)
+        self.temperature = self.llm_params.get("temperature", self.llm_default_temperature)
+
+        self.prompt_override = prompt_override
+        self.custom_prompt = custom_prompt
+
+        self.data_privacy = data_privacy
+        self.path = path
+        self.verbose = verbose
 
     def buildPromptForRole(self):
         prompt_role = f"""
@@ -50,9 +70,22 @@ Columns and their type are the following:
 
     def buildPromptForProblemSolving(self, request):
 
-        prompt_problem = f"""
+        if self.prompt_override:
+            return self.custom_prompt
 
-Given a DataFrame named 'df', write a Python code snippet that addresses the following request:
+        columns = ""
+        for col in self.columns:
+            col_type = self.dtypes[col]
+            columns += f"{col} ({col_type})\n"
+
+        prompt_problem = f"""
+Given a DataFrame named 'df' of {len(self)} rows and {len(self.columns)} columns,
+Its columns are the following:
+
+{columns}
+
+I want you to solve the following problem:
+write a Python code snippet that addresses the following request:
 {request}
 
 While crafting the code, please follow these guidelines:
@@ -61,7 +94,14 @@ While crafting the code, please follow these guidelines:
 3. If a single line solution is not possible, multiline solutions or functions are acceptable, but the code must end with an assignment to the variable 'result'.
 4. Assign the resulting code to the variable 'result'.
 5. Avoid importing any additional libraries than pandas and numpy.
+
 """
+        if not self.custom_prompt is None and len(self.custom_prompt) > 0:
+             
+            prompt_problem += f"""
+            Also:
+            {self.custom_prompt}
+            """
 
         return prompt_problem
 
@@ -107,10 +147,10 @@ While crafting the code, please follow these guidelines:
         
 
     def save(self,name,value):
-        if len(self.save_path) == 0:
+        if self.path is None or self.path == "":
             return  
         try:
-            with open(f"{self.save_path}/{name}", 'w') as file:
+            with open(f"{self.path}/{name}", 'w') as file:
                 file.write(value)
         except Exception as e:
             self.print(f"error {e}")
@@ -177,8 +217,11 @@ import numpy as np
 
         generated_code = response.choices[0].message.content
         if generated_code == "" or generated_code is None:
+            self.code_block = ""
             return None
         
+        self.code_block = generated_code
+
         results=[]
         for regexp in self.code_blocks:
             cleaned_code = self.extractPythonCode(generated_code,regexp)
@@ -207,9 +250,12 @@ import numpy as np
             if result is not None and str(result) != "":
                 break
 
-        if self.privacy == True:
+        if self.data_privacy == True:
             # non formatted result
             return result
+        
+        # currently the privacy option is not needed.
+        # in the future, we can choose to send data to LLM if privacy is set to false
 
         return None
 
