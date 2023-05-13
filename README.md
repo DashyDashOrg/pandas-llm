@@ -23,9 +23,6 @@ import os
 import pandas as pd
 from pandas_llm import PandasLLM
 
-# your key
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-
 # Data
 # Please note that these names, ages, and donations are randomly generated 
 # and do not correspond to real individuals or their donations.
@@ -41,10 +38,12 @@ data = [('John Doe', 25, 50),
         ('Olivia Jackson', 29, 55)]
 df = pd.DataFrame(data, columns=['name', 'age', 'donation'])
 
-conv_df = PandasLLM(data=df, config={ "openai_api_key":OPENAI_API_KEY})
+conv_df = PandasLLM(data=df, openai_api_key = os.environ.get("OPENAI_API_KEY"))
 result = conv_df.prompt("What is the average donation of people older than 30 who donated more than $50?")
 
 print(f"Result ({type(result)}):\n {result}")
+# Result (<class 'numpy.float64'>):
+#  75.0
 ```
 
 ## Contributing

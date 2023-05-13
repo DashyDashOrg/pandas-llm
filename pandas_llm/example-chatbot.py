@@ -8,6 +8,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from pandas_llm import PandasLLM
 
 # Data
+#  Please note that these names, ages, and donations are randomly generated and do not correspond to real individuals or their donations.
 data = [('John Doe', 25, 50), 
         ('Jane Smith', 38, 70),
         ('Alex Johnson', 45, 80),
@@ -54,11 +55,7 @@ def main():
         print("No OpenAI API key provided. Exiting.")
         return
 
-    config = {
-        "openai_api_key":openai_key
-    }
-
-    conv_df = PandasLLM(data=df, config=config)
+    conv_df = PandasLLM(data=df, llm_api_key = openai_key)
     print()
     banner = """
     Welcome to the Donation Data CLI.
@@ -66,7 +63,7 @@ def main():
     Please note that these names, ages, and donations are randomly generated and do not correspond to real individuals or their donations.
     
     You can ask questions like:
-    - show me the name of donators
+    - show me the name of donors
     - What is the average age of people who donated?
     - What is the average donation amount?
     - What is the average donation of people older than 30?
