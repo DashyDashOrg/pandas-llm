@@ -21,6 +21,10 @@ Here's a quick example of how to use pandas-llm:
 ```python
 import os
 import pandas as pd
+
+# import sys
+# from pathlib import Path
+# sys.path.append(str(Path(__file__).resolve().parent.parent))
 from pandas_llm import PandasLLM
 
 # Data
@@ -38,7 +42,7 @@ data = [('John Doe', 25, 50),
         ('Olivia Jackson', 29, 55)]
 df = pd.DataFrame(data, columns=['name', 'age', 'donation'])
 
-conv_df = PandasLLM(data=df, llm_api_key = os.environ.get("OPENAI_API_KEY"))
+conv_df = PandasLLM(data=df, llm_api_key = os.environ.get("OPENAI_API_KEY"), verbose=True)
 result = conv_df.prompt("What is the average donation of people older than 30 who donated more than $50?")
 
 print(f"Result ({type(result)}):\n {result}")

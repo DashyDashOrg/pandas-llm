@@ -63,7 +63,7 @@ def main():
     Please note that these names, ages, and donations are randomly generated and do not correspond to real individuals or their donations.
     
     You can ask questions like:
-    - show me the name of donors
+    - show me the list of names
     - What is the average age of people who donated?
     - What is the average donation amount?
     - What is the average donation of people older than 30?
