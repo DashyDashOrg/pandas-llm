@@ -1,6 +1,20 @@
-# pandas-llm
+# pandas-LLM
 
-pandas-llm is a lightweight Python library that extends pandas to allow querying datasets using OpenAI prompts. This powerful tool leverages the natural language processing capabilities of OpenAI to offer intuitive, language-based querying of your pandas dataframes.
+## Introduction
+pandas-llm is a lightweight Python library that extends pandas to allow querying datasets using OpenAI prompts. This powerful tool leverages the natural language processing capabilities of OpenAI to offer intuitive, language-based querying of your Pandas dataframes.
+
+## Key Features
+- **Natural Language Querying**: With pandas-llm, you can execute complex Pandas queries using natural language prompts. Instead of writing code, you can express your query in plain language and obtain the desired results.
+
+- **Seamless Integration**: The library seamlessly integrates with your existing Pandas workflow. You can continue using normal Pandas functions and syntax while leveraging the added capability of natural language queries.
+
+- **Efficiency and Performance**: pandas-LLM is designed to deliver efficient and performant querying capabilities. It uses OpenAI's language model to process queries quickly and accurately, providing rapid insights from your data.
+
+- **Flexible and Expressive**: Whether you need to filter, aggregate, sort, or transform your data, pandas-LLM allows you to express your requirements flexibly and expressively. You can perform complex operations on your dataframes with ease using human-readable language.
+
+- **Intelligent Results**: The library returns the results of your queries in a concise and understandable format. You can extract valuable insights from your data without complex code or manual analysis.
+
+With pandas-llm, you can unlock the power of natural language querying and effortlessly execute complex pandas queries. Let the library handle the intricacies of data manipulation while you focus on gaining insights and making data-driven decisions.
 
 ## Installation
 
