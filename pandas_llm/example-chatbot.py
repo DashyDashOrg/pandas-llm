@@ -49,13 +49,8 @@ print(df)
 
 def main():
 
-    # Set the OpenAI API key
-    openai_key = os.environ.get("OPENAI_API_KEY")
-    if openai_key is None:
-        print("No OpenAI API key provided. Exiting.")
-        return
-
-    conv_df = PandasLLM(data=df, llm_api_key = openai_key)
+    # Initialise library and set the OpenAI API key
+    conv_df = PandasLLM(data=df, llm_api_key = os.environ.get("OPENAI_API_KEY"))
     print()
     banner = """
     Welcome to the Donation Data CLI.
@@ -77,7 +72,9 @@ def main():
             break
 
         result = conv_df.prompt(prompt)
-        print(f"Result ({type(result)}):\n {result}")
+        code = conv_df.code_block
+        print(f"Executing the following expression of type {type(result)}:\n{code}\n\nResult is:\n {result}\n")
+        
 
 if __name__ == "__main__":
     main()

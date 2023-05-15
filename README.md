@@ -52,13 +52,21 @@ data = [('John Doe', 25, 50),
         ('Olivia Jackson', 29, 55)]
 df = pd.DataFrame(data, columns=['name', 'age', 'donation'])
 
-conv_df = PandasLLM(data=df, llm_api_key = os.environ.get("OPENAI_API_KEY"), verbose=True)
-result = conv_df.prompt("What is the average donation of people older than 30 who donated more than $50?")
+conv_df = PandasLLM(data=df, llm_api_key = os.environ.get("OPENAI_API_KEY"))
+result = conv_df.prompt("What is the average donation of people older than 40 who donated more than $50?")
+code = conv_df.code_block
 
-print(f"Result ({type(result)}):\n {result}")
-# Result (<class 'numpy.float64'>):
-#  75.0
+print(f"Executing the following expression of type {type(result)}:\n{code}\n\nResult is:\n {result}\n")
+# Executing the following expression of type <class 'numpy.float64'>:
+# result = df.loc[(df['age'] > 40) & (df['donation'] > 50), 'donation'].mean()
+
+# Result is:
+#  72.5
+
 ```
+
+There is also a chatbot available in the repository using the same dataset. 
+Look at example-chatbot.py 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.

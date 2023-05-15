@@ -333,7 +333,7 @@ import numpy as np
         for cleaned_code in results:
     
             try:
-                result = self.execInSandbox(self, cleaned_code)
+                result = self._execInSandbox(self, cleaned_code)
             except Exception as e:
                 self._print(f"error {e}")
                 if not self.force_sandbox:
