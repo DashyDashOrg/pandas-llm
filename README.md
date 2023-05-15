@@ -65,6 +65,32 @@ print(f"Executing the following expression of type {type(result)}:\n{code}\n\nRe
 
 ```
 
+## PandasLLM Class Constructor
+
+The constructor for the PandasLLM class has been enhanced in this release to provide more flexibility and control over the language model interaction. The constructor accepts the following arguments:
+
+**data** (mandatory): The data to be used. It can be a Pandas DataFrame, a list of lists, tuples, dictionaries, a dictionary, a string, or a list.
+
+**llm_engine** (optional): The name of the LLM engine to use. Currently, only OpenAI is supported. Defaults to "openai".
+
+**llm_params** (optional): A dictionary of parameters to be used with the OpenAI API. This allows customization of the LLM behavior. Defaults to model=gpt-3.5-turbo and temperature=0.2.
+
+**prompt_override** (optional): A boolean that determines whether or not the prompt is overridden. If set to True, the custom prompt becomes the main prompt. Defaults to False.
+
+**custom_prompt** (optional): A string that can be provided if prompt_override is False. The custom prompt will be added to the default pandas_llm prompt. Defaults to an empty string.
+
+**path** (optional): The path to the file where the debug data will be saved. If not specified, debug data files will not be generated.
+
+**verbose** (optional): A boolean determines whether debugging information will be printed. If set to True, additional debugging info will be displayed. Defaults to False.
+
+**data_privacy** (optional): A boolean determines whether the data is treated as private. If set to True, the function will not send the data content to OpenAI. Defaults to True.
+
+**llm_api_key** (optional): The OpenAI API key to be used. The library will attempt to use the default API key configured if not provided.
+
+**force_sandbox** (optional): A boolean determining the fallback behaviour if the sandbox environment fails. If set to False and the sandbox fails, the library will retry using eval, which is less safe. Defaults to False.
+
+
+
 There is also a chatbot available in the repository using the same dataset. 
 Look at example-chatbot.py 
 
