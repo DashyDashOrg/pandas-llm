@@ -6,6 +6,8 @@ pandas-llm is a lightweight Python library that extends pandas to allow querying
 ## Key Features
 - **Natural Language Querying**: With pandas-llm, you can execute complex Pandas queries using natural language prompts. Instead of writing code, you can express your query in plain language and obtain the desired results.
 
+- **Data Privacy**: Your data is not sent on the Internet. Pandas-LLM works locally with your data and uses openAI to create the query based on the dataframe columns and data types, not its content.
+
 - **Seamless Integration**: The library seamlessly integrates with your existing Pandas workflow. You can continue using normal Pandas functions and syntax while leveraging the added capability of natural language queries.
 
 - **Efficiency and Performance**: pandas-LLM is designed to deliver efficient and performant querying capabilities. It uses OpenAI's language model to process queries quickly and accurately, providing rapid insights from your data.
