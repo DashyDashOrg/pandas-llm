@@ -3,9 +3,10 @@ const {expect} = require('@playwright/test')
 
 exports.SignUp = class SignUp
 {
-    constructor(page)
+    constructor(page, isMobile)
     {
         this.page = page
+        this.isMobile = isMobile
         this.register_here = page.locator('.text-reset')
         this.first_name = page.locator('[formcontrolname="firstName"]')
         this.last_name = page.locator('[formcontrolname="lastName"]')

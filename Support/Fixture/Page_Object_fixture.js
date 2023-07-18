@@ -10,19 +10,19 @@ const {OrderVerify} = require('../Page_Object/OrderVerify')
 
 exports.test = base.test.extend
 ({
-    registerPage: async({page}, use)=>
+    registerPage: async({page, isMobile}, use)=>
     {
-        const registerPage = new SignUp(page)
+        const registerPage = new SignUp(page, isMobile)
         await use(registerPage) 
     },
-    loginPage: async({page}, use)=>
+    loginPage: async({page, isMobile}, use)=>
     {
-        const loginPage = new SignIn(page)
+        const loginPage = new SignIn(page, isMobile)
         await use(loginPage)
     },
-    orderSelectedProduct: async({page},use)=>
+    orderSelectedProduct: async({page, isMobile},use)=>
     {
-        const orderSelectedProduct = new OrderProduct(page)
+        const orderSelectedProduct = new OrderProduct(page,isMobile)
         await use(orderSelectedProduct)
     },
     API: async({page}, use)=>
@@ -39,9 +39,9 @@ exports.test = base.test.extend
 
     },
 
-    VerifyOrder: async({page},use)=>
+    VerifyOrder: async({page , isMobile},use)=>
     {
-        const VerifyOrder = new OrderVerify(page)
+        const VerifyOrder = new OrderVerify(page, isMobile)
         await use(VerifyOrder)
     }
 

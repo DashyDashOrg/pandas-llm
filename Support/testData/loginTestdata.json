@@ -1,0 +1,6 @@
+{
+    "baseURL": "https://rahulshettyacademy.com/client",
+    "email": "test_1@gmail.com",
+    "password":"Test@123",
+    "loginSuccesfullyToastMessage": "Login Successfully"
+}
